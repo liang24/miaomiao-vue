@@ -37,7 +37,8 @@
     </div> -->
 
     <div class="city_list">
-      <Scroller ref="city_list">
+      <Loading v-if="isLoading" />
+      <Scroller v-else ref="city_list">
         <div>
           <div class="city_hot">
             <h2>热门城市</h2>
@@ -78,6 +79,7 @@ export default {
     return {
       cityList: [],
       hotList: [],
+      isLoading: true,
     };
   },
   mounted() {
@@ -86,6 +88,7 @@ export default {
       var msg = res.data.msg;
       if (msg === "ok") {
         var data = res.data.data.cities;
+        this.isLoading = false;
         // console.log(data);
         // [{ index : 'A', list : [{ nm : '', id : 123 }]}]
 

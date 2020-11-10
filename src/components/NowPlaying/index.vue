@@ -1,6 +1,7 @@
 <template>
   <div class="movie_body" ref="movie_body">
-    <Scroller
+    <Loading v-if="isLoading" />
+    <Scroller v-else
       :handleToScroll="handleToScroll"
       :handleToTouchEnd="handleToTouchEnd"
     >
@@ -50,6 +51,7 @@ export default {
     return {
       movieList: [],
       pullDownMsg: "",
+      isLoading: true,
     };
   },
   mounted() {
@@ -57,7 +59,7 @@ export default {
       var msg = res.data.msg;
       if (msg === "ok") {
         this.movieList = res.data.data.movieList;
-
+        this.isLoading = false;
         // this.$nextTick(() => {
         //   var scroll = new BScroll(this.$refs.movie_body, {
         //     tap: true,
