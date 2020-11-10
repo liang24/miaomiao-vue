@@ -56,11 +56,17 @@ export default {
       var that = this;
       this.cancelRequest();
       this.axios
-        .get("/api/searchList?cityId=10&kw=" + newVal, {
-          cancelToken: new this.axios.CancelToken(function(c) {
-            that.source = c;
-          }),
-        })
+        .get(
+          "/api/searchList?cityId=" +
+            this.$store.state.city.id +
+            "&kw=" +
+            newVal,
+          {
+            cancelToken: new this.axios.CancelToken(function(c) {
+              that.source = c;
+            }),
+          }
+        )
         .then((res) => {
           var msg = res.data.msg;
           var movies = res.data.data.movies;

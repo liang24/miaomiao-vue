@@ -1,7 +1,8 @@
 <template>
   <div class="movie_body" ref="movie_body">
     <Loading v-if="isLoading" />
-    <Scroller v-else
+    <Scroller
+      v-else
       :handleToScroll="handleToScroll"
       :handleToTouchEnd="handleToTouchEnd"
     >
@@ -52,14 +53,21 @@ export default {
       movieList: [],
       pullDownMsg: "",
       isLoading: true,
+      prevCityId: -1,
     };
   },
-  mounted() {
-    this.axios.get("/api/movieOnInfoList?cityId=10").then((res) => {
+  activated() {
+    var cityId = this.$store.state.city.id;
+    if (this.prevCityId === cityId) {
+      return;
+    }
+
+    this.axios.get("/api/movieOnInfoList?cityId=" + cityId).then((res) => {
       var msg = res.data.msg;
       if (msg === "ok") {
         this.movieList = res.data.data.movieList;
         this.isLoading = false;
+        this.prevCityId = cityId;
         // this.$nextTick(() => {
         //   var scroll = new BScroll(this.$refs.movie_body, {
         //     tap: true,
