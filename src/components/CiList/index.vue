@@ -1,7 +1,8 @@
 <template>
   <div class="cinema_body">
-    <ul>
-      <!-- <li>
+    <Scroller>
+      <ul>
+        <!-- <li>
         <div>
           <span>大地影院(澳东世纪店)</span>
           <span class="q"><span class="price">22.9</span> 元起</span>
@@ -15,29 +16,30 @@
           <div>折扣卡</div>
         </div>
       </li> -->
-      <li v-for="item in cinemaList" :key="item.id">
-        <div>
-          <span>{{ item.rm }}</span>
-          <span class="q"
-            ><span class="price">{{ item.sellPrice }}</span> 元起</span
-          >
-        </div>
-        <div class="address">
-          <span>{{ item.addr }}</span>
-          <span>{{ item.distance }}</span>
-        </div>
-        <div class="card">
-          <div
-            v-for="(num, key) in item.tag"
-            v-if="num === 1"
-            :key="key"
-            :class="key | classCard"
-          >
-            {{ key | formatCard }}
+        <li v-for="item in cinemaList" :key="item.id">
+          <div>
+            <span>{{ item.rm }}</span>
+            <span class="q"
+              ><span class="price">{{ item.sellPrice }}</span> 元起</span
+            >
           </div>
-        </div>
-      </li>
-    </ul>
+          <div class="address">
+            <span>{{ item.addr }}</span>
+            <span>{{ item.distance }}</span>
+          </div>
+          <div class="card">
+            <div
+              v-for="(num, key) in item.tag"
+              v-if="num === 1"
+              :key="key"
+              :class="key | classCard"
+            >
+              {{ key | formatCard }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 

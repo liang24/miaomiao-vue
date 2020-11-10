@@ -1,7 +1,11 @@
 <template>
-  <div class="movie_body">
-    <ul>
-      <!-- <li>
+  <div class="movie_body" ref="movie_body">
+    <Scroller
+      :handleToScroll="handleToScroll"
+      :handleToTouchEnd="handleToTouchEnd"
+    >
+      <ul>
+        <!-- <li>
         <div class="pic_show"><img src="/images/movie_1.jpg" /></div>
         <div class="info_list">
           <h2>无名之辈</h2>
@@ -13,28 +17,39 @@
           购票
         </div>
       </li>  -->
-      <li v-for="item in movieList" :key="item.id">
-        <div class="pic_show"><img :src="item.img | setWH('120.180')" /></div>
-        <div class="info_list">
-          <h2>{{ item.nm }} <img v-if="item.version" src="@/assets/maxs.png" /> </h2>
-          <p>观众评 <span class="grade">{{ item.sc }}</span></p>
-          <p>主演: {{ item.star }}</p>
-          <p>{{ item.showInfo }}</p>
-        </div>
-        <div class="btn_mall">
-          购票
-        </div>
-      </li>
-    </ul>
+        <li class="pullDown">{{ pullDownMsg }}</li>
+        <li v-for="item in movieList" :key="item.id">
+          <div class="pic_show" @tap="handelToDetail">
+            <img :src="item.img | setWH('120.180')" />
+          </div>
+          <div class="info_list">
+            <h2>
+              {{ item.nm }} <img v-if="item.version" src="@/assets/maxs.png" />
+            </h2>
+            <p>
+              观众评 <span class="grade">{{ item.sc }}</span>
+            </p>
+            <p>主演: {{ item.star }}</p>
+            <p>{{ item.showInfo }}</p>
+          </div>
+          <div class="btn_mall">
+            购票
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
 <script>
+// import BScroll from "better-scroll";
+
 export default {
   name: "NowPlaying",
   data() {
     return {
       movieList: [],
+      pullDownMsg: "",
     };
   },
   mounted() {
@@ -42,8 +57,63 @@ export default {
       var msg = res.data.msg;
       if (msg === "ok") {
         this.movieList = res.data.data.movieList;
+
+        // this.$nextTick(() => {
+        //   var scroll = new BScroll(this.$refs.movie_body, {
+        //     tap: true,
+        //     probeType: 1,
+        //   });
+
+        //   scroll.on("scroll", (pos) => {
+        //     //console.log("scroll");
+
+        //     if (pos.y > 30) {
+        //       this.pullDownMsg = "正在更新中";
+        //     }
+        //   });
+
+        //   scroll.on("touchEnd", (pos) => {
+        //     // console.log("touchEnd");
+        //     if (pos.y > 30) {
+        //       this.axios.get("/api/movieOnInfoList?cityId=10").then((res) => {
+        //         var msg = res.data.msg;
+        //         if (msg === "ok") {
+        //           this.pullDownMsg = "更新成功";
+        //           setTimeout(() => {
+        //             this.movieList = res.data.data.movieList;
+        //             this.pullDownMsg = "";
+        //           }, 1000);
+        //         }
+        //       });
+        //     }
+        //   });
+        // });
       }
     });
+  },
+  methods: {
+    handelToDetail() {
+      console.log("handelToDetail");
+    },
+    handleToScroll(pos) {
+      if (pos.y > 30) {
+        this.pullDownMsg = "正在更新中";
+      }
+    },
+    handleToTouchEnd(pos) {
+      if (pos.y > 30) {
+        this.axios.get("/api/movieOnInfoList?cityId=10").then((res) => {
+          var msg = res.data.msg;
+          if (msg === "ok") {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              this.movieList = res.data.data.movieList;
+              this.pullDownMsg = "";
+            }, 1000);
+          }
+        });
+      }
+    },
   },
 };
 </script>
@@ -118,5 +188,10 @@ export default {
 }
 .movie_body .btn_pre {
   background-color: #3c9fe6;
+}
+.movie_body .pullDown {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 </style>
