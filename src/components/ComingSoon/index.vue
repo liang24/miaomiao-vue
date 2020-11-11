@@ -16,9 +16,11 @@
         </div>
       </li>  -->
         <li v-for="item in comingList" :key="item.id">
-          <div class="pic_show"><img :src="item.img | setWH('120.180')" /></div>
+          <div class="pic_show" @touchstart="handelToDetail(item.id)">
+            <img :src="item.img | setWH('120.180')" />
+          </div>
           <div class="info_list">
-            <h2>{{ item.nm }}</h2>
+            <h2 @touchstart="handelToDetail(item.id)">{{ item.nm }}</h2>
             <p>
               <span class="person">{{ item.wish }}</span> 人想看
             </p>
@@ -58,6 +60,12 @@ export default {
         this.prevCityId = cityId;
       }
     });
+  },
+  methods: {
+    handelToDetail(movieId) {
+      // console.log("handelToDetail");
+      this.$router.push("/movie/detail/2/" + movieId);
+    },
   },
 };
 </script>
